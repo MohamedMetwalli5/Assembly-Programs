@@ -1,0 +1,89 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 20-Dec-20 11:08:18 PM
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      :
+00000000                             3  * Written by :
+00000000                             4  * Date       :
+00000000                             5  * Description:
+00000000                             6  *-----------------------------------------------------------
+00001000                             7      ORG    $1000
+00001000                             8  START:                  ; first instruction of program
+00001000                             9  
+00001000                            10  * Put program code here
+00001000                            11         
+00001000                            12      
+00001000  41F9 00001078             13  begin                 LEA  STRING,A0         *putting the address of the entered string in A0
+00001006  43F9 0000108C             14                        LEA  RESULT,A1         *making the address of the resulted string to be in A1             
+0000100C  45F9 0000108B             15                        LEA  LENGTHOFSTRING,A2 *putting the length of the entered string in A2
+00001012  1412                      16                        MOVE.B (A2),D2         *store the length of the string in D2
+00001014  5302                      17                        SUB.B  #1,D2           *to use debra   
+00001016                            18                  
+00001016  1010                      19  getfirstcharacter     MOVE.B (A0),D0         *putting the first character of the string in D0   
+00001018  B03C 0020                 20                        CMP.B   #32,D0         *is it a space
+0000101C  6700 0006                 21                        BEQ     again          *it is a space then go to branch "again"   
+00001020  6000 0006                 22                        BRA     notspace       *it is a space then go to branch "notspace"
+00001024  5288                      23  again                 ADDA.L #1,A0           *increament the address in A0   
+00001026  60EE                      24                        BRA     getfirstcharacter  *still didn't meet any non-space character
+00001028                            25  
+00001028  12D8                      26  notspace              MOVE.B  (A0)+,(A1)+    *put the first non-character of A0 in the first place in A1 and increament the two address registers
+0000102A  103C 0000                 27                        MOVE.B  #0,D0          *add the initial value of the flag that would indicate whether we have to append a character or not in the RESULT string
+0000102E                            28                        
+0000102E                            29                       
+0000102E                            30                        
+0000102E  1210                      31  loop                  MOVE.B  (A0),D1       *put the first character of A0 in the register D1   
+00001030  B23C 0020                 32                        CMP.B   #32,D1        *is D1 a white space ?    
+00001034  6600 0006                 33                        BNE     here          *go to the branch "here" if D1 isn't a white space
+00001038  6000 000A                 34                        BRA     there         *go to the branch "there" if D1 is a white space
+0000103C  103C 0000                 35  here                  MOVE.B  #0,D0         *we set the flag D0 with 0
+00001040  6000 000A                 36                        BRA     adddirectly   *go to branch "adddirectly" if D0 equals 0
+00001044  B03C 0000                 37  there                 CMP.B   #0,D0         *check whether the flag is zero or one  
+00001048  6600 0018                 38                        BNE     addhere       *don't add because you just added a space just before this  
+0000104C  12D8                      39  adddirectly           MOVE.B  (A0)+,(A1)+   *add the character at the address "A0" to the position at the address "A1"
+0000104E  B23C 0020                 40                        CMP.B   #32,D1        *check whether the character that was copied to D0 before is a space
+00001052  6700 0006                 41                        BEQ     setflag1      *it is a space , then go to "setflag1"
+00001056  6600 0010                 42                        BNE     setflag0      *it isn't a space , then go to "setflag0"
+0000105A                            43  
+0000105A  103C 0001                 44  setflag1              MOVE.B  #1,D0      *set the flag D0 with 1
+0000105E  6000 0004                 45                        BRA     righthere  
+00001062  5288                      46  addhere               ADDA.L  #1,A0      *increament the address "A0"
+00001064  6000 000A                 47  righthere             BRA     next       *go to the "next" branch to avoid going to the next two lines
+00001068  103C 0000                 48  setflag0              MOVE.B  #0,D0      *set the flag D0 with 0   
+0000106C  6000 0002                 49                        BRA     next       *go to the "next" branch                 
+00001070                            50          
+00001070  51CA FFBC                 51  next                  DBRA   D2,loop     *repeat this loop again until D2 equals -1
+00001074                            52                             
+00001074                            53                       
+00001074  FFFF FFFF                 54      SIMHALT             ; halt simulator
+00001078                            55  
+00001078                            56  * Put variables and constants here
+00001078= 20 41 70 20 72 69 ...     57  STRING              DC.B     ' Ap ril 8   1985666'  *Enter the string here
+0000108B= 13                        58  LENGTHOFSTRING      DC.B     19                     *Enter the length of the string              
+0000108C                            59  RESULT              DS.B     19                     *Enter the length of the string again (this is the place where the new string is going to be stored)  
+0000109F                            60      END    START        ; last line of source
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+ADDDIRECTLY         104C
+ADDHERE             1062
+AGAIN               1024
+BEGIN               1000
+GETFIRSTCHARACTER   1016
+HERE                103C
+LENGTHOFSTRING      108B
+LOOP                102E
+NEXT                1070
+NOTSPACE            1028
+RESULT              108C
+RIGHTHERE           1064
+SETFLAG0            1068
+SETFLAG1            105A
+START               1000
+STRING              1078
+THERE               1044
