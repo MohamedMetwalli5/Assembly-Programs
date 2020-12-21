@@ -1,0 +1,67 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 20-Dec-20 11:14:10 PM
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      :
+00000000                             3  * Written by :
+00000000                             4  * Date       :
+00000000                             5  * Description:
+00000000                             6  *-----------------------------------------------------------
+00001000                             7      ORG    $1000
+00001000                             8  START:                  ; first instruction of program
+00001000                             9  
+00001000                            10  * Put program code here
+00001000                            11      
+00001000  43F9 0000104C             12             LEA sorted,A1     *the address of the sorted array at the end of sorting is stored in A1
+00001006  303C 0007                 13             MOVE #7,D0        *the counter of the outer loop , and we made it 7 because we use "debra buit-in function" 
+0000100A                            14      
+0000100A  183C 0000                 15  outerloop  MOVE.B  #0,D4     *set the max number at the beginning of every outer loop with 0
+0000100E  323C 0007                 16             MOVE    #7,D1     *the counter of the inner loop , and we made it 7 because we use "debra"
+00001012  41F9 00001044             17             LEA     list,A0   *the pointer for the elements in the inner (only loop of numbers) loop 
+00001018                            18              
+00001018  1410                      19  innerloop  MOVE.B  (A0),D2   *the element in the inner loop (the old loop)
+0000101A  B404                      20             CMP.B   D4,D2     *to know which number of the two numbers is bigger
+0000101C  6A04                      21             BPL.B   setmax    *to set the bigger number in D4 , by going to branch "setmax"
+0000101E  6000 000C                 22             BRA     next      *not bigger number , then go to branch "next"
+00001022                            23             
+00001022  C942                      24  setmax     EXG     D4,D2      *setting the maximum number in D4 , by exchanging the contents of two registers (D2,D4)
+00001024  2448                      25             MOVE.L  A0,A2      *store the address of the max number until now in A2
+00001026  5288                      26             ADDA.L  #1,A0      *increament the address of A0
+00001028  6000 0004                 27             BRA     there      *to avoid incresing A0 two times in case of entering the "setmax" , go to branch "there"
+0000102C                            28                     
+0000102C  5288                      29  next       ADDA.L  #1,A0          *increament the address of A0 to go to the next number
+0000102E  51C9 FFE8                 30  there      DBRA    D1,innerloop   *if the counter of the outer loop didn't indicate the end of the loop then go to the innerloop                
+00001032  12C4                      31             MOVE.B  D4,(A1)+       *stting the maxnumber in the right position in the sorted array descendingly
+00001034  14BC 0000                 32             MOVE.B  #0,(A2)        *set the maximum number until now to be 0 in the old array as we use two arrays   
+00001038  51C8 FFD0                 33             DBRA D0,outerloop      *if the counter of the outer loop didn't indicate the end of the loop then go to the innerloop to find the next number    
+0000103C  6000 0002                 34             BRA     exit            
+00001040                            35  
+00001040                            36  exit       *the end of sorting the array 
+00001040                            37  
+00001040                            38          
+00001040  FFFF FFFF                 39      SIMHALT             ; halt simulator
+00001044                            40  
+00001044                            41  * Put variables and constants here
+00001044                            42  
+00001044= 01 02 05 04 08 05 ...     43  list DC.B 1,2,5,4,8,5,4,2         *the old array of size which to be eneter to be sorted
+0000104C= 00 00 00 00 00 00 ...     44  sorted DC.B 0,0,0,0,0,0,0,0       *the new sorted array of size 8 will be stored here descendingly after sorting the old array
+00001054                            45  
+00001054                            46      END    START        ; last line of source
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+EXIT                1040
+INNERLOOP           1018
+LIST                1044
+NEXT                102C
+OUTERLOOP           100A
+SETMAX              1022
+SORTED              104C
+START               1000
+THERE               102E
