@@ -1,0 +1,54 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 20-Dec-20 11:05:42 PM
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      :
+00000000                             3  * Written by :
+00000000                             4  * Date       :
+00000000                             5  * Description:
+00000000                             6  *-----------------------------------------------------------
+00001000                             7      ORG    $1000
+00001000                             8  START:                  ; first instruction of program
+00001000                             9  
+00001000                            10  * Put program code here
+00001000  103C 0000                 11      MOVE.B   #0,D0  *the register that will be used to store the sum and we put in it an initial value of 0
+00001004  123C 0000                 12      MOVE.B   #0,D1  *the register that will be used with the "trap (built-in function)" to print the sum  
+00001008  1039 0000103C             13      MOVE.B   NUM1,D0  *copy the first number to the sum register D0
+0000100E  D039 0000103D             14      ADD.B    NUM2,D0  *add the second number to the sum register D0
+00001014  D039 0000103E             15      ADD.B    NUM3,D0  *add the third number to the sum register D0  
+0000101A  D039 0000103F             16      ADD.B    NUM4,D0  *add the fourth number to the sum register D0  
+00001020  D039 00001040             17      ADD.B    NUM5,D0  *add the fifth number to the sum register D0  
+00001026  D039 00001041             18      ADD.B    NUM6,D0  *add the sixth number to the sum register D0  
+0000102C  1200                      19      MOVE.B   D0,D1    *copy the content of the register "D0" to the register D1
+0000102E  143C 000A                 20      MOVE.B #$A,D2     *used to print the output (the sum) in decimal
+00001032  103C 000F                 21      MOVE.B #$0f,D0    *used to print the output (the sum) in decimal  
+00001036  4E4F                      22      trap #15          *used to print the output (the sum) in decimal 
+00001038                            23      
+00001038  FFFF FFFF                 24      SIMHALT             ; halt simulator
+0000103C                            25  
+0000103C                            26  * Put variables and constants here
+0000103C                            27      
+0000103C= 06                        28  NUM1 DC.B $6  *store the first number
+0000103D= 04                        29  NUM2 DC.B $4  *store the second number  
+0000103E= 0C                        30  NUM3 DC.B $C  *store the third number
+0000103F= 10                        31  NUM4 DC.B $10 *store the fourth number
+00001040= 11                        32  NUM5 DC.B $11 *store the fifth number  
+00001041= 32                        33  NUM6 DC.B $32 *store the sixth number
+00001042                            34      
+00001042                            35      END    START        ; last line of source
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+NUM1                103C
+NUM2                103D
+NUM3                103E
+NUM4                103F
+NUM5                1040
+NUM6                1041
+START               1000
